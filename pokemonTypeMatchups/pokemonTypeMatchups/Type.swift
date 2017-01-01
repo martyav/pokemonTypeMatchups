@@ -65,8 +65,6 @@ enum Type {
             return [.Fairy, .Ice, .Rock]
         case .Water:
             return [.Ground, .Rock, .Fire]
-        case .None:
-            return [.None]
         default:
             return [.None]
         }
@@ -108,8 +106,6 @@ enum Type {
             return [.Fire, .Fighting, .Ground]
         case .Water:
             return [.Electric, .Grass]
-        case .None:
-            return [.Normal]
         default:
             return [.None]
         }
@@ -172,8 +168,6 @@ enum Type {
             return [.Normal, .Flying, .Poison, .Rock, .Bug, .Steel, .Grass, .Psychic, .Ice, .Dragon, .Fairy]
         case .Water:
             return [.Steel, .Fire, .Water, .Ice]
-        case .None:
-            return [.None]
         default:
             return [.None]
         }
@@ -215,8 +209,6 @@ enum Type {
             return [.Fire, .Steel, .Water, .Electric]
         case .Water:
             return [.Water, .Grass, .Dragon]
-        case .None:
-            return [.None]
         default:
             return [.None]
         }
