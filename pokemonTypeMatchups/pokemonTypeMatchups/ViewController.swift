@@ -12,13 +12,20 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        let mon = Pokemon(type1: .Fighting, type2: .Dark)
+        
+        let mon = Pokemon(type1: .Normal, type2: .None)
         mon.listTypes()
         mon.defensivelyStrongAgainst()
         mon.defensivelyWeakAgainst()
         mon.offensivelyStrongAgainst()
         mon.offensivelyWeakAgainst()
+        
+        let mon2 = Pokemon(type1: .Dark, type2: .Fighting)
+        mon2.listTypes()
+        mon2.defensivelyStrongAgainst()
+        mon2.defensivelyWeakAgainst()
+        mon2.offensivelyStrongAgainst()
+        mon2.offensivelyWeakAgainst()
     }
 }
 
