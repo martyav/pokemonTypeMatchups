@@ -144,15 +144,6 @@ class Pokemon {
         return keepDoubles(type1Arr: type1.notVeryEffectiveAgainst(), type2Arr: type2.notVeryEffectiveAgainst())
     }
     
-    func ensureNoOverlapBtwnSuperAndIneffectives() -> [Type]? {
-        let notEffective = notVeryEffectiveAgainst()
-        let superEffective = strongAgainst()
-        
-        let checkForOverLap = keepDoubles(type1Arr: notEffective, type2Arr: superEffective)
-        
-        return checkForOverLap
-    }
-    
     func uselessAgainst() -> [Type]? {
         guard type1.uselessAgainst() != [.None] else {
             return nil
@@ -186,13 +177,46 @@ class Pokemon {
         }
     }
     
+    // Defending Against Moves When Types Differ On Effectiveness...
+    
+    func ensureNoOverlapBtwnSuperAndIneffectives() -> [Type]? {
+        let notEffective = notVeryEffectiveAgainst()
+        let superEffective = strongAgainst()
+        
+        let checkForOverLap = keepDoubles(type1Arr: notEffective, type2Arr: superEffective)
+        
+        return checkForOverLap
+    }
+    
+    func cleanOfOverlaps() -> [Type] {
+        let superEffectives = strongAgainst()
+        let checkForOverLap = ensureNoOverlapBtwnSuperAndIneffectives()
+        var cleanOfOverLap: [Type]
+        
+        guard superEffectives != [.None] else { return [] }
+        
+        if let overlappingEffectiveness = checkForOverLap {
+            cleanOfOverLap = []
+            
+            for type in superEffectives {
+                if overlappingEffectiveness.contains(type) {
+                    continue
+                } else {
+                    cleanOfOverLap.append(type)
+                }
+            }
+            return cleanOfOverLap
+        }
+        return superEffectives
+    }
+    
     // MARK: - Misc. User Output
     
     func listTypes() {
         if type2 != .None {
-            print("This Pokemon is \(type1) and \(type2).")
+            print("This pokemon is \(type1) and \(type2).")
         } else {
-            print("This Pokemon is \(type1).")
+            print("This pokemon is \(type1).")
         }
     }
     
@@ -270,8 +294,6 @@ class Pokemon {
                     print("and \(type) moves.")
                 }
             }
-        } else {
-            print("This pokemon has no double-resistances.")
         }
     }
     
@@ -298,27 +320,8 @@ class Pokemon {
     
     func listStrongAgainst() {
         var superEffectives = strongAgainst()
-        let checkForOverLap = ensureNoOverlapBtwnSuperAndIneffectives()
-        var cleanOfOverLap: [Type]
         
-        guard superEffectives != [.None] else { return }
-        
-        if let overlappingEffectiveness = checkForOverLap {
-            cleanOfOverLap = []
-            
-            for type in superEffectives {
-                if overlappingEffectiveness.contains(type) {
-                    continue
-                } else {
-                    cleanOfOverLap.append(type)
-                }
-            }
-            superEffectives = cleanOfOverLap
-        }
-        
-        guard superEffectives != [] else { return }
-        
-        print("This pokemon is super-effective against ", terminator: "" )
+        print("This pokemon's STAB moves are super-effective against ", terminator: "" )
         
         for type in superEffectives {
             if superEffectives.count == 1 {
@@ -327,6 +330,32 @@ class Pokemon {
                 print(type, terminator: ", ")
             } else {
                 print("and \(type) types.")
+            }
+        }
+        
+        print("Specifically, its \(type1) moves are super-effective against ", terminator: "")
+        
+        for type in type1.superEffectiveAgainst() {
+            if type1.superEffectiveAgainst().count == 1 {
+                print("\(type) types.")
+            } else if type1.superEffectiveAgainst().index(of: type) != type1.superEffectiveAgainst().count - 1 {
+                print(type, terminator: ", ")
+            } else {
+                print("and \(type) types.")
+            }
+        }
+        
+        if type2 != .None {
+            print("Its \(type2) moves are super-effective against ", terminator: "")
+            
+            for type in type2.superEffectiveAgainst() {
+                if type2.superEffectiveAgainst().count == 1 {
+                    print("\(type) types.")
+                } else if type2.superEffectiveAgainst().index(of: type) != type2.superEffectiveAgainst().count - 1 {
+                    print(type, terminator: ", ")
+                } else {
+                    print("and \(type) types, too.")
+                }
             }
         }
     }
@@ -371,7 +400,7 @@ class Pokemon {
         
         guard ineffectives != [] else { return }
         
-        print("This pokemon is not very effective against ", terminator: "" )
+        print("This pokemon's STAB moves are not very effective against ", terminator: "" )
         
         for type in ineffectives {
             if ineffectives.count == 1 {
@@ -380,6 +409,32 @@ class Pokemon {
                 print(type, terminator: ", ")
             } else {
                 print("and \(type) types.")
+            }
+        }
+        
+        print("Specifically, its \(type1) moves are not very effective against ", terminator: "")
+        
+        for type in type1.notVeryEffectiveAgainst() {
+            if type1.notVeryEffectiveAgainst().count == 1 {
+                print("\(type) types.")
+            } else if type1.notVeryEffectiveAgainst().index(of: type) != type1.notVeryEffectiveAgainst().count - 1 {
+                print(type, terminator: ", ")
+            } else {
+                print("and \(type) types.")
+            }
+        }
+        
+        if type2 != .None {
+            print("Its \(type2) moves are not very effective against ", terminator: "")
+            
+            for type in type2.notVeryEffectiveAgainst() {
+                if type2.notVeryEffectiveAgainst().count == 1 {
+                    print("\(type) types.")
+                } else if type2.notVeryEffectiveAgainst().index(of: type) != type2.notVeryEffectiveAgainst().count - 1 {
+                    print(type, terminator: ", ")
+                } else {
+                    print("and \(type) types, either.")
+                }
             }
         }
     }
@@ -418,6 +473,33 @@ class Pokemon {
             }
             print(" types are immune to this Pokemon's STAB attacks.")
         }
+        
+        print("Specifically, its \(type1) moves are useless against ", terminator: "")
+        
+        for type in type1.immuneTo() {
+            if type1.immuneTo().count == 1 {
+                print("\(type) types.")
+            } else if type1.immuneTo().index(of: type) != type1.immuneTo().count - 1  {
+                print("\(type) types ")
+            } else {
+                print("and \(type) types.")
+            }
+        }
+        
+        if type2 != .None {
+            print("Its \(type2) moves are also useless against ", terminator: "")
+            
+            for type in type2.immuneTo() {
+                if type2.immuneTo().count == 1 {
+                    print("\(type) types.")
+                } else if type1.immuneTo().index(of: type) != type1.immuneTo().count - 1  {
+                    print("\(type) types ")
+                } else {
+                    print("and \(type) types.")
+                }
+            }
+        }
+
     }
     
 }
