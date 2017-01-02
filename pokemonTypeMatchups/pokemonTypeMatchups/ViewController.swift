@@ -15,8 +15,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         let mon = Pokemon(type1: .Fighting, type2: .Dark)
         mon.listTypes()
-        mon.listResists()
-        mon.listDoubleResistances()
+        mon.defensivelyStrongAgainst()
     }
 }
 
