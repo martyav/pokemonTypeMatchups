@@ -111,7 +111,7 @@ enum Type {
         }
     }
     
-    func uselessAgainst() -> [Type]? {
+    func uselessAgainst() -> [Type] {
         switch self {
         case .Dragon:
             return [.Fairy]
@@ -130,11 +130,11 @@ enum Type {
         case .Ghost:
             return [.Normal]
         default:
-            return nil
+            return [.None]
         }
     }
     
-    func immuneTo() -> [Type]? {
+    func immuneTo() -> [Type] {
         switch self {
         case .Fairy:
             return [.Dragon]
@@ -151,7 +151,7 @@ enum Type {
         case .Normal:
             return [.Ghost]
         default:
-            return nil
+            return [.None]
         }
     }
     

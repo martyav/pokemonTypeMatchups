@@ -16,6 +16,9 @@ class ViewController: UIViewController {
         let mon = Pokemon(type1: .Fighting, type2: .Dark)
         mon.listTypes()
         mon.defensivelyStrongAgainst()
+        mon.defensivelyWeakAgainst()
+        mon.offensivelyStrongAgainst()
+        mon.offensivelyWeakAgainst()
     }
 }
 
