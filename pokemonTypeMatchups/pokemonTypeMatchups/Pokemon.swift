@@ -101,15 +101,19 @@ class Pokemon {
         }
     }
     
-    func defensivelyStrongAgainst() {
-        listResists()
+    func defensivelyStrongAgainst() -> String {
+        var response: String = ""
+        
+        response += listResists()
         if type2 != .None {
-            listDoubleResists()
+            response += listDoubleResists()
         }
+        
+        return response
     }
     
-    func defensivelyWeakAgainst() {
-        listWeaknesses()
+    func defensivelyWeakAgainst() -> String {
+        return listWeaknesses()
     }
     
     // MARK: - Offense Logic
@@ -154,21 +158,25 @@ class Pokemon {
         }
     }
     
-    func offensivelyStrongAgainst() {
-        listStrongAgainst()
+    func offensivelyStrongAgainst() -> String {
+        return listStrongAgainst()
         //        if type2 != .None && doubleStrongAgainst() != nil {
         //            listDoubleStrongAgainst()
         //        }
     }
     
-    func offensivelyWeakAgainst() {
-        listNotVeryEffectiveAgainst()
+    func offensivelyWeakAgainst() -> String {
+        var response: String = ""
+        
+        response += listNotVeryEffectiveAgainst()
         if type2 != .None  && doubleNotEffectiveAgainst() != nil {
-            listDoubleNotEffectiveAgainst()
+            response += listDoubleNotEffectiveAgainst()
         }
         if uselessAgainst() != nil {
-            listUselessAgainst()
+            response += listUselessAgainst()
         }
+        
+        return response
     }
     
     // Defending Against Moves When Types Differ On Effectiveness...
@@ -417,7 +425,7 @@ class Pokemon {
             if type1.superEffectiveAgainst().count == 1 {
                 response += "\(type) types. "
             } else if type1.superEffectiveAgainst().index(of: type) != type1.superEffectiveAgainst().count - 1 {
-                response += "(type), "
+                response += "\(type), "
             } else {
                 response += "and \(type) types. "
             }
@@ -430,7 +438,7 @@ class Pokemon {
                 if type2.superEffectiveAgainst().count == 1 {
                     response += "\(type) types. "
                 } else if type2.superEffectiveAgainst().index(of: type) != type2.superEffectiveAgainst().count - 1 {
-                    response += "(type), "
+                    response += "\(type), "
                 } else {
                     response += "and \(type) types, too. "
                 }
