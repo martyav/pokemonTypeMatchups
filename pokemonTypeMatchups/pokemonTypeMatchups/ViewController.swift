@@ -9,7 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    @IBOutlet weak var presentOutput: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,7 +21,7 @@ class ViewController: UIViewController {
         mon.offensivelyStrongAgainst()
         mon.offensivelyWeakAgainst()
         print(" ")
-        let mon2 = Pokemon(type1: .Dark, type2: .Fighting)
+        let mon2 = Pokemon(type1: .Dark, type2: .Fairy)
         mon2.listTypes()
         mon2.defensivelyStrongAgainst()
         mon2.defensivelyWeakAgainst()

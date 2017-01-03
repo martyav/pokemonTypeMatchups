@@ -219,12 +219,16 @@ class Pokemon {
     
     // MARK: - Misc. User Output
     
-    func listTypes() {
+    func listTypes() -> String {
+        let response: String
+        
         if type2 != .None {
-            print("This pokemon is \(type1) and \(type2).")
+            response = "This pokemon is \(type1) and \(type2)."
         } else {
-            print("This pokemon is \(type1).")
+            response = "This pokemon is \(type1)."
         }
+        
+        return response
     }
     
     // MARK: - User Output for DEFENSE
@@ -531,8 +535,5 @@ class Pokemon {
                 }
             }
         }
-        
     }
-    
 }
-
