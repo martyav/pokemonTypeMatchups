@@ -122,9 +122,9 @@ class Pokemon {
         }
     }
     
-//    func doubleStrongAgainst() -> [Type]? {
-//        return keepDoubles(type1Arr: type1.superEffectiveAgainst(), type2Arr: type2.superEffectiveAgainst())
-//    }
+    //    func doubleStrongAgainst() -> [Type]? {
+    //        return keepDoubles(type1Arr: type1.superEffectiveAgainst(), type2Arr: type2.superEffectiveAgainst())
+    //    }
     
     func notVeryEffectiveAgainst() -> [Type] {
         if type2 == .None {
@@ -156,9 +156,9 @@ class Pokemon {
     
     func offensivelyStrongAgainst() {
         listStrongAgainst()
-//        if type2 != .None && doubleStrongAgainst() != nil {
-//            listDoubleStrongAgainst()
-//        }
+        //        if type2 != .None && doubleStrongAgainst() != nil {
+        //            listDoubleStrongAgainst()
+        //        }
     }
     
     func offensivelyWeakAgainst() {
@@ -223,9 +223,9 @@ class Pokemon {
         let response: String
         
         if type2 != .None {
-            response = "This pokemon is \(type1) and \(type2)."
+            response = "This pokemon is \(type1) and \(type2). "
         } else {
-            response = "This pokemon is \(type1)."
+            response = "This pokemon is \(type1). "
         }
         
         return response
@@ -233,307 +233,347 @@ class Pokemon {
     
     // MARK: - User Output for DEFENSE
     
-    func listWeaknesses() {
+    func listWeaknesses() -> String {
+        var response: String = ""
+        
         let weaknesses = removeTypeOverlapsThatCancelOut()
         
         guard weaknesses != [.None] || weaknesses != [] else {
-            print("This pokemon has no weaknesses.")
-            return
+            response += "This pokemon has no weaknesses. "
+            return response
         }
         
-        print("This pokemon is weak to ", terminator: "" )
+        response += "This pokemon is weak to "
         
         if let doubleWeak = doubleWeakTo() {
             for type in weaknesses where type != .None {
                 if weaknesses.count == 1 && doubleWeak.contains(type) {
-                    print("\(type) moves (double-weak).")
+                    response += "\(type) moves (double-weak). "
                 } else if weaknesses.count == 1 {
-                    print("\(type) moves.")
+                    response += "\(type) moves."
                 } else if weaknesses.index(of: type) != weaknesses.count - 1  && doubleWeak.contains(type) {
-                    print(type, terminator: " (double-weak), ")
+                    response += "\(type) (double-weak), "
                 } else if weaknesses.index(of: type) != weaknesses.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else if doubleWeak.contains(type) {
-                    print("and \(type) moves (double-weak).")
+                    response += "and \(type) moves (double-weak). "
                 } else {
-                    print("and \(type) moves.")
+                    response += "and \(type) moves. "
                 }
             }
         } else {
-        for type in weaknesses where type != .None {
-            if weaknesses.count == 1 {
-                print("\(type) moves.")
-            } else if weaknesses.index(of: type) != weaknesses.count - 1 {
-                print(type, terminator: ", ")
-            } else {
-                print("and \(type) moves.")
-            }
+            for type in weaknesses where type != .None {
+                if weaknesses.count == 1 {
+                    response += "\(type) moves."
+                } else if weaknesses.index(of: type) != weaknesses.count - 1 {
+                    response += "\(type), "
+                } else {
+                    response += "and \(type) moves. "
+                }
             }
         }
+        
+        return response
     }
     
-    func listDoubleWeaknesses() {
+    func listDoubleWeaknesses() -> String {
         let doubleWeaknesses = doubleWeakTo()
         
-        print("This pokemon is double-weak to ", terminator: "")
+        var response: String = ""
+        
+        response += "This pokemon is double-weak to "
+        
         if let unwrapdoubleWeaknesses = doubleWeaknesses {
             for type in unwrapdoubleWeaknesses where type != .None {
                 if unwrapdoubleWeaknesses.count == 1 {
-                    print("\(type) moves.")
+                    response += "\(type) moves. "
                 } else if unwrapdoubleWeaknesses.index(of: type) != unwrapdoubleWeaknesses.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else {
-                    print("and \(type) moves.")
+                    response += "and \(type) moves. "
                 }
             }
         } else {
-            print("This pokemon has no double-weaknesses")
+            response += "This pokemon has no double-weaknesses. "
         }
+        
+        return response
     }
     
-    func listResists() {
+    func listResists() -> String {
         let resistsAgainst = resists()
         
+        var response: String = ""
+        
         guard resistsAgainst != [] || resistsAgainst != [.None] else {
-            print("This pokemon has no resistances.")
-            return
+            response += "This pokemon has no resistances. "
+            
+            return response
         }
         
-        print("This pokemon resists ", terminator: "" )
+        response += "This pokemon resists "
         
         if let immunities = immuneTo() {
             for type in resistsAgainst where type != .None {
                 if resistsAgainst.count == 1 && immunities.contains(type) {
-                    print("\(type) moves (immune).")
+                    response += "\(type) moves (immune). "
                 } else if resistsAgainst.count == 1 {
-                    print("\(type) moves.")
+                    response += "\(type) moves. "
                 } else if resistsAgainst.index(of: type) != resistsAgainst.count - 1 && immunities.contains(type) {
-                    print(type, terminator: " (immune), ")
+                    response += "\(type) (immune), "
                 } else if resistsAgainst.index(of: type) != resistsAgainst.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else if immunities.contains(type) {
-                    print("and \(type) moves (immune).")
+                    response += "and \(type) moves (immune). "
                 } else {
-                    print("and \(type) moves.")
+                    response += "and \(type) moves. "
                 }
             }
         } else {
             
             for type in resistsAgainst where type != .None {
                 if resistsAgainst.count == 1 {
-                    print("\(type) moves.")
+                    response += "\(type) moves. "
                 }
                 else if resistsAgainst.index(of: type) != resistsAgainst.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else {
-                    print("and \(type) moves.")
+                    response += "and \(type) moves. "
                 }
             }
         }
+        
+        return response
     }
     
-    func listDoubleResists() {
+    func listDoubleResists() -> String {
         let doubleResistsAgainst = doubleResists()
         
+        var response: String = ""
+        
         if let unwrapDoubleResistsAgainst = doubleResistsAgainst {
-            print("This pokemon double-resists ", terminator: "")
+            response += "This pokemon double-resists "
             
             for type in unwrapDoubleResistsAgainst where type != .None {
                 if unwrapDoubleResistsAgainst.count == 1 {
-                    print("\(type) moves.")
+                    response += "\(type) moves. "
                 } else if unwrapDoubleResistsAgainst.index(of: type) != unwrapDoubleResistsAgainst.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else {
-                    print("and \(type) moves.")
+                    response += "and \(type) moves. "
                 }
             }
         }
+        
+        return response
     }
     
-    func listImmunities() {
+    func listImmunities() -> String {
         let immunities = immuneTo()
         
-        print("This pokemon is immune to ", terminator: "")
+        var response: String = ""
+        
+        response += "This pokemon is immune to "
+        
         if let unwrapImmunites = immunities {
             for type in unwrapImmunites where type != .None {
                 if unwrapImmunites.count == 1 {
-                    print("\(type) moves.")
+                    response += "\(type) moves."
                 } else if unwrapImmunites.index(of: type) != unwrapImmunites.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "(type), "
                 } else {
-                    print("and \(type) moves.")
+                    response += "and \(type) moves. "
                 }
             }
         } else {
-            print("This pokemon is not immune to any attacks.")
+            response += "This pokemon is not immune to any attacks. "
         }
+        
+        return response
     }
     
     // MARK: - User Output for OFFENSE
     
-    func listStrongAgainst() {
+    func listStrongAgainst() -> String {
         let superEffectives = strongAgainst()
         
-        print("This pokemon's STAB moves are super-effective against ", terminator: "" )
+        var response: String = ""
+        
+        response += "This pokemon's STAB moves are super-effective against "
         
         for type in superEffectives where type != .None {
             if superEffectives.count == 1 {
-                print("\(type) types.")
+                response += "\(type) types. "
             } else if superEffectives.index(of: type) != superEffectives.count - 1 {
-                print(type, terminator: ", ")
+                response += "\(type), "
             } else {
-                print("and \(type) types.")
+                response += "and \(type) types. "
             }
         }
         
-        print("Specifically, its \(type1) moves are super-effective against ", terminator: "")
+        response += "Specifically, its \(type1) moves are super-effective against "
         
         for type in type1.superEffectiveAgainst() where type != .None {
             if type1.superEffectiveAgainst().count == 1 {
-                print("\(type) types.")
+                response += "\(type) types. "
             } else if type1.superEffectiveAgainst().index(of: type) != type1.superEffectiveAgainst().count - 1 {
-                print(type, terminator: ", ")
+                response += "(type), "
             } else {
-                print("and \(type) types.")
+                response += "and \(type) types. "
             }
         }
         
         if type2.superEffectiveAgainst() != [.None] {
-            print("Its \(type2) moves are super-effective against ", terminator: "")
+            response += "Its \(type2) moves are super-effective against "
             
             for type in type2.superEffectiveAgainst() where type != .None {
                 if type2.superEffectiveAgainst().count == 1 {
-                    print("\(type) types.")
+                    response += "\(type) types. "
                 } else if type2.superEffectiveAgainst().index(of: type) != type2.superEffectiveAgainst().count - 1 {
-                    print(type, terminator: ", ")
+                    response += "(type), "
                 } else {
-                    print("and \(type) types, too.")
+                    response += "and \(type) types, too. "
                 }
             }
         }
+        
+        return response
     }
     
-//    func listDoubleStrongAgainst() {
-//        let doubleSuperEffectives = doubleStrongAgainst()
-//        
-//        if let unwrapdoubleSuperEffectives = doubleSuperEffectives {
-//            print("This pokemon is twice as super-effective against ", terminator: "")
-//            
-//            for type in unwrapdoubleSuperEffectives where type != .None {
-//                if unwrapdoubleSuperEffectives.count == 1 {
-//                    print("\(type) types.")
-//                } else if unwrapdoubleSuperEffectives.index(of: type) != unwrapdoubleSuperEffectives.count - 1 {
-//                    print(type, terminator: ", ")
-//                } else {
-//                    print("and \(type) types.")
-//                }
-//            }
-//        }
-//    }
+    //    func listDoubleStrongAgainst() {
+    //        let doubleSuperEffectives = doubleStrongAgainst()
+    //
+    //        if let unwrapdoubleSuperEffectives = doubleSuperEffectives {
+    //            print("This pokemon is twice as super-effective against ", terminator: "")
+    //
+    //            for type in unwrapdoubleSuperEffectives where type != .None {
+    //                if unwrapdoubleSuperEffectives.count == 1 {
+    //                    print("\(type) types.")
+    //                } else if unwrapdoubleSuperEffectives.index(of: type) != unwrapdoubleSuperEffectives.count - 1 {
+    //                    print(type, terminator: ", ")
+    //                } else {
+    //                    print("and \(type) types.")
+    //                }
+    //            }
+    //        }
+    //    }
     
-    func listNotVeryEffectiveAgainst() {
+    func listNotVeryEffectiveAgainst() -> String {
         let ineffectives = notVeryEffectiveAgainst()
         
-        guard ineffectives != [.None] else { return }
+        var response: String = ""
         
-        print("This pokemon's STAB moves are not very effective against ", terminator: "" )
+        guard ineffectives != [.None] else { return response }
+        
+        response += "This pokemon's STAB moves are not very effective against "
         
         for type in ineffectives where type != .None {
             if ineffectives.count == 1 {
-                print("\(type) types.")
+                response += "\(type) types. "
             } else if ineffectives.index(of: type) != ineffectives.count - 1 {
-                print(type, terminator: ", ")
+                response += "\(type), "
             } else {
-                print("and \(type) types.")
+                response += "and \(type) types. "
             }
         }
         
-        print("Specifically, its \(type1) moves are not very effective against ", terminator: "")
+        response += "Specifically, its \(type1) moves are not very effective against "
         
         for type in type1.notVeryEffectiveAgainst() where type != .None {
             if type1.notVeryEffectiveAgainst().count == 1 {
-                print("\(type) types.")
+                response += "\(type) types. "
             } else if type1.notVeryEffectiveAgainst().index(of: type) != type1.notVeryEffectiveAgainst().count - 1 {
-                print(type, terminator: ", ")
+                response += "\(type), "
             } else {
-                print("and \(type) types.")
+                response += "and \(type) types. "
             }
         }
         
         if type2 != .None || type2 != .Normal {
-            print("Its \(type2) moves are not very effective against ", terminator: "")
+            response += "Its \(type2) moves are not very effective against "
             
             for type in type2.notVeryEffectiveAgainst() where type != .None {
                 if type2.notVeryEffectiveAgainst().count == 1 {
-                    print("\(type) types.")
+                    response += "\(type) types."
                 } else if type2.notVeryEffectiveAgainst().index(of: type) != type2.notVeryEffectiveAgainst().count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else {
-                    print("and \(type) types, either.")
+                    response += "and \(type) types, either. "
                 }
             }
         }
+        
+        return response
     }
     
-    func listDoubleNotEffectiveAgainst() {
+    func listDoubleNotEffectiveAgainst() -> String {
         let doubleIneffectives = doubleNotEffectiveAgainst()
         
+        var response: String = ""
+        
         if let unwrapdoubleIneffectives = doubleIneffectives {
-            print("This pokemon is doubly not very effective against ", terminator: "")
+            response += "This pokemon is doubly not very effective against "
             
             for type in unwrapdoubleIneffectives where type != .None {
                 if unwrapdoubleIneffectives.count == 1 {
-                    print("\(type) types.")
+                    response += "\(type) types."
                 } else if unwrapdoubleIneffectives.index(of: type) != unwrapdoubleIneffectives.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else {
-                    print("and \(type) types.")
+                    response += "and \(type) types."
                 }
             }
         }
+        
+        return response
     }
     
-    func listUselessAgainst() {
+    func listUselessAgainst() -> String {
         let useless = uselessAgainst()
+        
+        var response: String = ""
         
         if let unwrapUseless = useless {
             
             for type in unwrapUseless where type != .None {
                 if unwrapUseless.count == 1 {
-                    print("\(type)", terminator: " ")
+                    response += "\(type) "
                 } else if unwrapUseless.index(of: type) != unwrapUseless.count - 1 {
-                    print(type, terminator: ", ")
+                    response += "\(type), "
                 } else {
-                    print("and \(type)", terminator: " ")
+                    response += "and \(type) "
                 }
             }
-            print("types are immune to this Pokemon's STAB attacks.")
+            response += "types are immune to this Pokemon's STAB attacks. "
         }
         
-        print("Specifically, its \(type1) moves are useless against ", terminator: "")
+        response += "Specifically, its \(type1) moves are useless against "
         
         for type in type1.immuneTo() where type != .None {
             if type1.immuneTo().count == 1 {
-                print("\(type) types.")
+                response += "\(type) types."
             } else if type1.immuneTo().index(of: type) != type1.immuneTo().count - 1  {
-                print("\(type) types ", terminator: "")
+                response += "\(type) types, "
             } else {
-                print("and \(type) types.")
+                response += "and \(type) types."
             }
         }
         
         if type2 != .None {
-            print("Its \(type2) moves are also useless against ", terminator: "")
+            response += "Its \(type2) moves are also useless against "
             
             for type in type2.immuneTo() where type != .None {
                 if type2.immuneTo().count == 1 {
-                    print("\(type) types.")
+                    response += "\(type) types."
                 } else if type1.immuneTo().index(of: type) != type1.immuneTo().count - 1  {
-                    print("\(type) types ", terminator: "")
+                    response += "\(type) types, "
                 } else {
-                    print("and \(type) types.")
+                    response += "and \(type) types."
                 }
             }
         }
+        
+        return response
     }
+    
 }
