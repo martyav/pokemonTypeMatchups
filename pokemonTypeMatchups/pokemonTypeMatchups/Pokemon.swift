@@ -9,10 +9,12 @@
 import Foundation
 
 class Pokemon {
+    let name: String
     let type1: Type
     let type2: Type
     
-    init(type1: Type, type2: Type = .None) {
+    init(name: String, type1: Type, type2: Type = .None) {
+        self.name = name
         self.type1 = type1
         self.type2 = type2
     }
@@ -101,21 +103,6 @@ class Pokemon {
         }
     }
     
-    func defensivelyStrongAgainst() -> String {
-        var response: String = ""
-        
-        response += listResists()
-        if type2 != .None {
-            response += listDoubleResists()
-        }
-        
-        return response
-    }
-    
-    func defensivelyWeakAgainst() -> String {
-        return listWeaknesses()
-    }
-    
     // MARK: - Offense Logic
     
     func strongAgainst() -> [Type] {
@@ -163,20 +150,6 @@ class Pokemon {
         //        if type2 != .None && doubleStrongAgainst() != nil {
         //            listDoubleStrongAgainst()
         //        }
-    }
-    
-    func offensivelyWeakAgainst() -> String {
-        var response: String = ""
-        
-        response += listNotVeryEffectiveAgainst()
-        if type2 != .None  && doubleNotEffectiveAgainst() != nil {
-            response += listDoubleNotEffectiveAgainst()
-        }
-        if uselessAgainst() != nil {
-            response += listUselessAgainst()
-        }
-        
-        return response
     }
     
     // Defending Against Moves When Types Differ On Effectiveness...
@@ -231,9 +204,9 @@ class Pokemon {
         let response: String
         
         if type2 != .None {
-            response = "This pokemon is \(type1) and \(type2). "
+            response = "\(name) is a \(type1)/\(type2) type pokemon. "
         } else {
-            response = "This pokemon is \(type1). "
+            response = "\(name) is a \(type1) type. "
         }
         
         return response
@@ -247,11 +220,11 @@ class Pokemon {
         let weaknesses = removeTypeOverlapsThatCancelOut()
         
         guard weaknesses != [.None] || weaknesses != [] else {
-            response += "This pokemon has no weaknesses. "
+            response += "\(name) has no weaknesses. "
             return response
         }
         
-        response += "This pokemon is weak to "
+        response += "\(name) is weak to "
         
         if let doubleWeak = doubleWeakTo() {
             for type in weaknesses where type != .None {
@@ -289,7 +262,7 @@ class Pokemon {
         
         var response: String = ""
         
-        response += "This pokemon is double-weak to "
+        response += "It is double-weak to "
         
         if let unwrapdoubleWeaknesses = doubleWeaknesses {
             for type in unwrapdoubleWeaknesses where type != .None {
@@ -302,7 +275,7 @@ class Pokemon {
                 }
             }
         } else {
-            response += "This pokemon has no double-weaknesses. "
+            response += "\(name) has no double-weaknesses. "
         }
         
         return response
@@ -314,12 +287,12 @@ class Pokemon {
         var response: String = ""
         
         guard resistsAgainst != [] || resistsAgainst != [.None] else {
-            response += "This pokemon has no resistances. "
+            response += "\(name) has no resistances. "
             
             return response
         }
         
-        response += "This pokemon resists "
+        response += "\(name) resists "
         
         if let immunities = immuneTo() {
             for type in resistsAgainst where type != .None {
@@ -360,7 +333,7 @@ class Pokemon {
         var response: String = ""
         
         if let unwrapDoubleResistsAgainst = doubleResistsAgainst {
-            response += "This pokemon double-resists "
+            response += "It double-resists "
             
             for type in unwrapDoubleResistsAgainst where type != .None {
                 if unwrapDoubleResistsAgainst.count == 1 {
@@ -381,7 +354,7 @@ class Pokemon {
         
         var response: String = ""
         
-        response += "This pokemon is immune to "
+        response += "\(name) is immune to "
         
         if let unwrapImmunites = immunities {
             for type in unwrapImmunites where type != .None {
@@ -394,7 +367,7 @@ class Pokemon {
                 }
             }
         } else {
-            response += "This pokemon is not immune to any attacks. "
+            response += "\(name) is not immune to any attacks. "
         }
         
         return response
@@ -584,4 +557,38 @@ class Pokemon {
         return response
     }
     
+    // MARK: - Quick & Easy Ouput Display for Offense/Defense
+    
+    func defenseOverview() -> String {
+        var response: String = ""
+        
+        response += listResists()
+        if type2 != .None {
+            response += listDoubleResists()
+        }
+        
+        response += listWeaknesses()
+        
+        return response
+    }
+    
+    // run list
+    
+    func offenseOverview() -> String {
+        var response: String = ""
+        
+        response += listStrongAgainst()
+        
+        response += listNotVeryEffectiveAgainst()
+        if type2 != .None  && doubleNotEffectiveAgainst() != nil {
+            response += listDoubleNotEffectiveAgainst()
+        }
+        if uselessAgainst() != nil {
+            response += listUselessAgainst()
+        }
+        
+        return response
+    }
+    
+    // run listStrongAgainst for corresponding info on supereffectives
 }
