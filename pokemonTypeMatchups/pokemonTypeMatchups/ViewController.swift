@@ -14,8 +14,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let mon = Pokemon(name: "Gyrados", type1: .Water, type2: .Flying)
-        presentOutput.text = mon.listTypes() + "\n\n" + mon.defenseOverview() + "\n\n" + mon.offenseOverview()
+        let mon = Pokemon(name: "Pyroar", type1: .Fire, type2: .Normal)
+        presentOutput.text = mon.listTypes() + "\n\n" + mon.offenseOverview() + "\n\n" + mon.defenseOverview()
     }
 }
 

@@ -296,30 +296,24 @@ class Pokemon {
         
         if let immunities = immuneTo() {
             for type in resistsAgainst where type != .None {
-                if resistsAgainst.count == 1 && immunities.contains(type) {
+                if resistsAgainst.index(of: type) == resistsAgainst.count - 1 && immunities.contains(type) {
                     response += "\(type) moves (immune). "
-                } else if resistsAgainst.count == 1 {
+                } else if resistsAgainst.index(of: type) == resistsAgainst.count - 1 {
                     response += "\(type) moves. "
                 } else if resistsAgainst.index(of: type) != resistsAgainst.count - 1 && immunities.contains(type) {
-                    response += "\(type) (immune), "
+                    response += "\(type) (immune), and "
                 } else if resistsAgainst.index(of: type) != resistsAgainst.count - 1 {
-                    response += "\(type), "
-                } else if immunities.contains(type) {
-                    response += "and \(type) moves (immune). "
-                } else {
-                    response += "and \(type) moves. "
+                    response += "\(type), and "
                 }
             }
         } else {
             
             for type in resistsAgainst where type != .None {
-                if resistsAgainst.count == 1 {
+                if resistsAgainst.index(of: type) == resistsAgainst.count - 1 {
                     response += "\(type) moves. "
                 }
                 else if resistsAgainst.index(of: type) != resistsAgainst.count - 1 {
-                    response += "\(type), "
-                } else {
-                    response += "and \(type) moves. "
+                    response += "\(type), and "
                 }
             }
         }
@@ -388,7 +382,7 @@ class Pokemon {
             } else if superEffectives.index(of: type) != superEffectives.count - 1 {
                 response += "\(type), "
             } else {
-                response += "and \(type) types. "
+                response += "and \(type) types. " + "\n\n"
             }
         }
         
@@ -398,9 +392,7 @@ class Pokemon {
             if type1.superEffectiveAgainst().count == 1 {
                 response += "\(type) types. "
             } else if type1.superEffectiveAgainst().index(of: type) != type1.superEffectiveAgainst().count - 1 {
-                response += "\(type), "
-            } else {
-                response += "and \(type) types. "
+                response += "\(type), and "
             }
         }
         
@@ -411,9 +403,9 @@ class Pokemon {
                 if type2.superEffectiveAgainst().count == 1 {
                     response += "\(type) types. "
                 } else if type2.superEffectiveAgainst().index(of: type) != type2.superEffectiveAgainst().count - 1 {
-                    response += "\(type), "
+                    response += "\(type), and "
                 } else {
-                    response += "and \(type) types, too. "
+                    response += "\(type) types, too. "
                 }
             }
         }
@@ -448,38 +440,60 @@ class Pokemon {
         
         response += "This pokemon's STAB moves are not very effective against "
         
-        for type in ineffectives where type != .None {
-            if ineffectives.count == 1 {
-                response += "\(type) types. "
-            } else if ineffectives.index(of: type) != ineffectives.count - 1 {
-                response += "\(type), "
-            } else {
-                response += "and \(type) types. "
+        if let immunities = immuneTo() {
+            for type in ineffectives where type != .None {
+                if ineffectives.index(of: type) == ineffectives.count - 1 && immunities.contains(type) {
+                    response += "\(type) moves (immune). "
+                } else if ineffectives.index(of: type) == ineffectives.count - 1 {
+                    response += "\(type) moves. "
+                } else if ineffectives.index(of: type) == ineffectives.count - 1 && immunities.contains(type) {
+                    response += "\(type) (immune), and "
+                } else if ineffectives.index(of: type) == ineffectives.count - 1 {
+                    response += "\(type), and "
+                }
+            }
+        } else {
+            
+            for type in ineffectives where type != .None {
+                if ineffectives.index(of: type) == ineffectives.count - 1 {
+                    response += "\(type) moves. "
+                }
+                else if ineffectives.index(of: type) != ineffectives.count - 1 {
+                    response += "\(type), and "
+                }
             }
         }
         
-        response += "Specifically, its \(type1) moves are not very effective against "
-        
-        for type in type1.notVeryEffectiveAgainst() where type != .None {
-            if type1.notVeryEffectiveAgainst().count == 1 {
-                response += "\(type) types. "
-            } else if type1.notVeryEffectiveAgainst().index(of: type) != type1.notVeryEffectiveAgainst().count - 1 {
-                response += "\(type), "
-            } else {
-                response += "and \(type) types. "
-            }
-        }
         
         if type2 != .None || type2 != .Normal {
-            response += "Its \(type2) moves are not very effective against "
-            
-            for type in type2.notVeryEffectiveAgainst() where type != .None {
-                if type2.notVeryEffectiveAgainst().count == 1 {
-                    response += "\(type) types."
-                } else if type2.notVeryEffectiveAgainst().index(of: type) != type2.notVeryEffectiveAgainst().count - 1 {
-                    response += "\(type), "
-                } else {
-                    response += "and \(type) types, either. "
+            response += "\n\n" + "Its \(type2) moves are not very effective against "
+            if let immunities = immuneTo() {
+                for type in ineffectives where type != .None {
+                    if ineffectives.count == 1 && immunities.contains(type) {
+                        response += "\(type) moves (immune). "
+                    } else if ineffectives.count == 1 {
+                        response += "\(type) moves. "
+                    } else if ineffectives.index(of: type) != ineffectives.count - 1 && immunities.contains(type) {
+                        response += "\(type) (immune), "
+                    } else if ineffectives.index(of: type) != ineffectives.count - 1 {
+                        response += "\(type), "
+                    } else if ineffectives.contains(type) {
+                        response += "and \(type) moves (immune). "
+                    } else {
+                        response += "and \(type) moves. "
+                    }
+                }
+            } else {
+                
+                for type in ineffectives where type != .None {
+                    if ineffectives.count == 1 {
+                        response += "\(type) moves. "
+                    }
+                    else if ineffectives.index(of: type) != ineffectives.count - 1 {
+                        response += "\(type), "
+                    } else {
+                        response += "and \(type) moves. "
+                    }
                 }
             }
         }
@@ -493,7 +507,7 @@ class Pokemon {
         var response: String = ""
         
         if let unwrapdoubleIneffectives = doubleIneffectives {
-            response += "This pokemon is doubly not very effective against "
+            response += "\(name) is doubly not very effective against "
             
             for type in unwrapdoubleIneffectives where type != .None {
                 if unwrapdoubleIneffectives.count == 1 {
@@ -501,7 +515,7 @@ class Pokemon {
                 } else if unwrapdoubleIneffectives.index(of: type) != unwrapdoubleIneffectives.count - 1 {
                     response += "\(type), "
                 } else {
-                    response += "and \(type) types."
+                    response += "and \(type) types. "
                 }
             }
         }
@@ -536,7 +550,7 @@ class Pokemon {
             } else if type1.immuneTo().index(of: type) != type1.immuneTo().count - 1  {
                 response += "\(type) types, "
             } else {
-                response += "and \(type) types."
+                response += "and \(type) types. "
             }
         }
         
@@ -563,8 +577,9 @@ class Pokemon {
         var response: String = ""
         
         response += listResists()
+        
         if type2 != .None {
-            response += listDoubleResists()
+            response += "\n\n" + listDoubleResists()
         }
         
         response += listWeaknesses()
@@ -572,20 +587,12 @@ class Pokemon {
         return response
     }
     
-    // run list
-    
     func offenseOverview() -> String {
         var response: String = ""
         
         response += listStrongAgainst()
         
-        response += listNotVeryEffectiveAgainst()
-        if type2 != .None  && doubleNotEffectiveAgainst() != nil {
-            response += listDoubleNotEffectiveAgainst()
-        }
-        if uselessAgainst() != nil {
-            response += listUselessAgainst()
-        }
+        response += "\n" + listNotVeryEffectiveAgainst()
         
         return response
     }
